@@ -5,9 +5,15 @@
 #include <stdbool.h>
 
 int *closest;
+int map_min;
+int map_max;
 
-int *create_map(long len) {
-	return malloc(sizeof(int) * len);
+int *create_map(int min, int max) {
+	map_min = min;
+	map_max = max;
+	
+	long size = (long)max - (long)min + 1;
+	return malloc(sizeof(int) * size);
 }
 
 void destroy_map(int *map) {
@@ -16,18 +22,14 @@ void destroy_map(int *map) {
 
 void put(int key, int value) 
 {
-	long index = (long)INT_MAX;
-	index -= 0;
-	index += key;
+	long index = key - map_min;
 
 	closest[index] = value;
 }
 
-bool get(int key)
+int get(int key)
 {
-	long index = (long)INT_MAX;
-	index -= 0;
-	index += key;
+	long index = key - map_min;
 
 	return closest[index];
 }
@@ -42,16 +44,16 @@ int *findClosestMap(int arr[], int n) {
 
 		int middle = (arr[i] + arr[i+1]) / 2;
 
-		for (int n = arr[i] + 1; n < arr[i+1]; n++) {
-			if (n <= middle) {
-				put(n, arr[i]);
+		for (int num = arr[i] + 1; num < arr[i+1]; num++) {
+			if (num <= middle) {
+				put(num, arr[i]);
 			} else {
-				put(n, arr[i+1]);
+				put(num, arr[i+1]);
 			}
 		}
 	}
 
-	put(arr[n], arr[n]);
+	put(arr[n-1], arr[n-1]);
 
 	return closest;
 }
@@ -75,6 +77,9 @@ void find(int arrA[], int arrB[], int m, int n) {
 	qsort(arrA, m, sizeof(int), cmp);
 
 	findClosestMap(arrA, m);
+
+	smallestArray[0] = arrA[0];
+	smallestArray[1] = arrB[0];
 
 	int smallestFromA = arrA[0];
 	int greatestFromA = arrA[m - 1];
@@ -100,7 +105,6 @@ int *randomArray(int size, int lower, int upper) {
 	int *arr = malloc(sizeof(int) * size);
 	if (arr != NULL) {
 
-		srand(time(NULL)); 
 
 		for (int i = 0; i < size; i++) {
 			arr[i] = (rand() % ((long)upper - (long)lower + 1)) + lower; 
@@ -110,32 +114,65 @@ int *randomArray(int size, int lower, int upper) {
 	return arr;
 }
 
+void print_arr(int arr[], int n) {
+	printf("[");
+	for (int i = 0; i < n-1; i++) {
+		printf("%d, ", arr[i]);
+	}
+	printf("%d]\n", arr[n-1]);
+}
+
+void test() {
+	
+	closest = create_map(-1, 28);
+
+	int arrA[] = {-1, 5, 10, 20, 28, 3};
+	int arrB[] = {26, 134, 135, 15, 17, 500};
+
+	find(arrA, arrB, 6, 6);
+	print_arr(smallestArray, 2);
+}
 int main(int argc, char *argv[static argc])
 {
 	if (argc < 3) {
 		return 1;
 	}
+	
+	test();
+	return 0;
+	srand(time(NULL)); 
 
 	int start, end, step;
 
 	sscanf(argv[1], "%d", &start);
-	sscanf(argv[1], "%d", &end);
+	sscanf(argv[2], "%d", &end);
 	step = 1;
 
-	closest = create_map((long)INT_MAX - (long)INT_MIN + 1);
+	closest = create_map(-5000, 5000);
+
+	if (closest == NULL) {
+		fprintf(stderr, "unable to allocate so much space\n");
+		return 2;
+	}
 	
 	for (int i = start; i <= end; i += step) {
 
-		int *arrA = randomArray(i, INT_MIN, INT_MAX);
-		int *arrB = randomArray(i, INT_MIN, INT_MAX);
+		int *arrA = randomArray(i, -5000, 5000);
+		int *arrB = randomArray(i, -5000, 5000);
 
+		print_arr(arrA, i);
+		print_arr(arrB, i);
+		
 		find(arrA, arrB, i, i);
 
+		print_arr(smallestArray, 2);
+		
 		free(arrA);
 		free(arrB);
 	}
 
 	destroy_map(closest);
+
 
 
 	return 0;
