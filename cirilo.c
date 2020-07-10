@@ -4,6 +4,8 @@
 #include <limits.h>
 #include <stdbool.h>
 
+#define MIN_NUMBER -1000000
+#define MAX_NUMBER  1000000
 int *closest;
 int map_min;
 int map_max;
@@ -132,14 +134,14 @@ void test() {
 	find(arrA, arrB, 6, 6);
 	print_arr(smallestArray, 2);
 }
+
+
 int main(int argc, char *argv[static argc])
 {
 	if (argc < 3) {
 		return 1;
 	}
 	
-	test();
-	return 0;
 	srand(time(NULL)); 
 
 	int start, end, step;
@@ -148,7 +150,7 @@ int main(int argc, char *argv[static argc])
 	sscanf(argv[2], "%d", &end);
 	step = 1;
 
-	closest = create_map(-5000, 5000);
+	closest = create_map(MIN_NUMBER, MAX_NUMBER);
 
 	if (closest == NULL) {
 		fprintf(stderr, "unable to allocate so much space\n");
@@ -157,15 +159,16 @@ int main(int argc, char *argv[static argc])
 	
 	for (int i = start; i <= end; i += step) {
 
-		int *arrA = randomArray(i, -5000, 5000);
-		int *arrB = randomArray(i, -5000, 5000);
+		int *arrA = randomArray(i, MIN_NUMBER, MAX_NUMBER);
+		int *arrB = randomArray(i, MIN_NUMBER, MAX_NUMBER);
 
-		print_arr(arrA, i);
-		print_arr(arrB, i);
+		//print_arr(arrA, i);
+		//print_arr(arrB, i);
 		
 		find(arrA, arrB, i, i);
 
 		print_arr(smallestArray, 2);
+		printf("\n");
 		
 		free(arrA);
 		free(arrB);
