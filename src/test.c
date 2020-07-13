@@ -78,7 +78,12 @@ int main(int argc, char *argv[static argc])
 
 	sscanf(argv[1], "%d", &start);
 	sscanf(argv[2], "%d", &end);
-	step = 1;
+
+	if (argc > 3) {
+		sscanf(argv[3], "%d", &step);
+	} else {
+		step = 1;
+	}
 
 	printf("n,classic(ms),cirilo(ms)\n");
 	for (int i = start; i <= end; i += step) {
