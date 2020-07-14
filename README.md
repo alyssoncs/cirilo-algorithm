@@ -3,6 +3,10 @@
 
 The following is a description of a--as far as I know--new solution for the [Smallest Difference pair of values between two unsorted Arrays](https://www.geeksforgeeks.org/smallest-difference-pair-values-two-unsorted-arrays) problem.
 
+## Disclaimer
+
+I'm claiming the following algorithm as mine because I couldn't find it elsewhere. If you've implemented it before me, please let me know.
+
 ## The problem
 
 Simply stated, the problem consists of given two arrays of integers, **A** and **B** of size **m** and **n** respectively, find the pair of numbers **(A<sub>i</sub>, B<sub>j</sub>)** with the smallest difference between them.
@@ -53,9 +57,33 @@ find(A, B) {
 
 My solution sorts only the smallest array, taking **O(m\*log(m))**. 
 
-After that, it computes and save in a hash map all the closest possible pairs between every number in the array and all numbers between **min(arr)** and **max(arr)**, that being the minimum and maximum value contained in the array. All of that can be done in **O(max(arr) - min(arr))**.
+After that, it computes and save in a hash map all the smallest possible pairs between every number in the array and all integers between **min(arr)** and **max(arr)**, that being the minimum and maximum value contained in the array. All of that can be done in **O(max(arr) - min(arr))**.
 
-Finally, it only has to find the smallest pair between the two arrays using the previous hash map, that takes **O(n)**.
+So if, after sorted, we had ``A = [-2, 5, 9, 12]`` we would create the following map:
+
+``` c
+[
+	-2 -> -2,
+	-1 -> -2,
+	 0 -> -2,
+	 1 -> -2,
+	 2 ->  5,
+	 3 ->  5,
+	 4 ->  5,
+	 5 ->  5,
+	 6 ->  5,
+	 7 ->  5,
+	 8 ->  9,
+	 9 ->  9,
+	10 ->  9,
+	11 -> 12,
+	12 -> 12
+]
+```
+
+Where the key are all the integers between **min(arr)** and **max(arr)** and the values are the elements in **A** closest to these numbers.
+
+Finally, for each element on **B** we get from the map the corresponding element on **A** that is closest from it, and, from all those pairs, choose the smallest. That takes **O(n)**.
 
 The final algorithm space complexity is:
 
@@ -65,9 +93,9 @@ The final algorithm space complexity is:
 
 And the space complexity (because of the hash map) is:
 
-**O(max(A) - min(A))** the first array is smaller than the second, or:
+**O(max(A) - min(A))** if the first array is smaller than the second, or:
 
-**O(max(B) - min(B))** otherwise
+**O(max(B) - min(B))** otherwise;
 
 Pseudocode:
 
@@ -145,3 +173,9 @@ The following is a result of a comparison with random arrays of same size rangin
 ![alt text](data/svg/2-200000-1.svg "Comparison")
 
 ## Drawbacks
+
+The most obvious drawback of this solution is the increase on the space complexity, being an example of the space-time trade-off.
+
+It also introduces another variable in both the space and time complexity, the range of numbers in the arrays, the greater the numbers on the arrays get, the slower and heavy the algorithm will run. Making it unusable if there is need to use bignums.
+
+That aside, it is important to acknowledge that it is trivial to make the classic algorithm work with floating-point numbers, which is not possible in the proposed solution.
