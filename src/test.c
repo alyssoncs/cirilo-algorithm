@@ -2,19 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <limits.h>
-#include <stdbool.h>
 
 #include "algorithms/cirilo/cirilo.h"
 #include "algorithms/classic/classic.h"
 
 #define MIN_NUMBER -10000
 #define MAX_NUMBER  10000
-
-long diff(long a, long b) 
-{
-	return labs(a - b);
-}
 
 int *create_random_array(int size, int lower, int upper) 
 {
@@ -41,29 +34,6 @@ int *copy_array(int arr[], int n)
 	}
 
 	return arr_c;
-}
-
-void print_arr(int arr[], int n) 
-{
-	printf("[");
-	for (int i = 0; i < n-1; i++) {
-		printf("%d, ", arr[i]);
-	}
-	printf("%d]\n", arr[n-1]);
-}
-
-void test()
-{
-	int first_array[] = {-1, 5, 10, 20, 28, 3};
-	int second_array[] = {26, 134, 135, 15, 17, 500};
-
-	int m = sizeof(first_array) / sizeof(first_array[0]);
-	int n = sizeof(second_array) / sizeof(second_array[0]);
-	
-	int *closest_pair = cirilo_find(first_array, second_array, m, n);
-	print_arr(closest_pair, 2);
-
-	free(closest_pair);
 }
 
 int main(int argc, char *argv[static argc])
