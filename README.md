@@ -176,6 +176,6 @@ The following is a result of a comparison with random arrays of same size rangin
 
 The most obvious drawback of this solution is the increase on the space complexity, being an example of the space-time trade-off.
 
-It also introduces another variable in both the space and time complexity, the range of numbers in the arrays, the greater the numbers on the arrays get, the slower and heavy the algorithm will run. Making it unusable if there is need to use bignums.
+It also introduces another variable in both the space and time complexity, the range of numbers in the arrays, the greater the numbers on the arrays get, the slower and heavy the algorithm will run, making it unusable if there is need to use bignums.
 
 That aside, it is important to acknowledge that it is trivial to make the classic algorithm work with floating-point numbers, which is not possible in the proposed solution.
