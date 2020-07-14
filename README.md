@@ -1,7 +1,7 @@
 # Cirilo's algorithm
 > An overkill algorithm for those in a hurry
 
-The following is a description of a--as far as I know--new solution for the [Smallest Difference pair of values between two unsorted Arrays](https://www.geeksforgeeks.org/smallest-difference-pair-values-two-unsorted-arrays) problem.
+The following is a description of a&ndash;as far as I know&ndash;new solution for the [Smallest Difference pair of values between two unsorted Arrays](https://www.geeksforgeeks.org/smallest-difference-pair-values-two-unsorted-arrays) problem.
 
 ## Disclaimer
 
