@@ -57,7 +57,7 @@ find(A, B) {
 
 My solution sorts only the smallest array, taking **O(m\*log(m))**. 
 
-After that, it computes and save in a hash map all the smallest possible pairs between every number in the array and all integers between **min(arr)** and **max(arr)**, that being the minimum and maximum value contained in the array. All of that can be done in **O(max(arr) - min(arr))**.
+After that, it computes and save in a hash map all the smallest possible pairs between every number in the array and all integers between **min(A)** and **max(A)**, that being the minimum and maximum value contained in the array. All of that can be done in **O(max(A) - min(A))**.
 
 So if, after sorted, we had ``A = [-2, 5, 9, 12]`` we would create the following map:
 
@@ -81,9 +81,15 @@ So if, after sorted, we had ``A = [-2, 5, 9, 12]`` we would create the following
 ]
 ```
 
-Where the key are all the integers between **min(arr)** and **max(arr)** and the values are the elements in **A** closest to these numbers.
+Where the key are all the integers between **min(A)** and **max(A)** and the values are the elements in **A** closest to these numbers.
 
-Finally, for each element on **B** we get from the map the corresponding element on **A** that is closest from it, and, from all those pairs, choose the smallest. That takes **O(n)**.
+Finally, for each element on **B** we form a pair with the closest element from it in **A** following this logic: 
+
+* if the element is less than **min(A)]** the closest element we can get is **min(A)**;
+* if it is greater than **max(A)** the closest element is **max(A)**;
+* for any other element that is between **min(A)** and **max(A)** the closest pair can be found querying the map for that element.
+
+And, from all those pairs, we choose the smallest. All of this takes **O(n)**.
 
 The final algorithm space complexity is:
 
@@ -172,10 +178,33 @@ The following is a result of a comparison with random arrays of same size rangin
 
 ![alt text](data/svg/2-200000-1.svg "Comparison")
 
+Is important to note that when both arrays are of equal size, that is **n** = **m**, the classic solution takes:
+
+**O(n\*log(n) + n\*log(n))** = **O(2 n\*log(n))** = **O(n\*log(n))** 
+
+And my solution takes 
+
+**O(n\*log(n) + n + max(A)-min(A))** = **O(n\*log(n) + max(A)-min(A))**
+
+
 ## Drawbacks
 
 The most obvious drawback of this solution is the increase on the space complexity, being an example of the space-time trade-off.
 
-It also introduces another variable in both the space and time complexity, the range of numbers in the arrays, the greater the numbers on the arrays get, the slower and heavy the algorithm will run, making it unusable if there is need to use bignums.
+It also introduces another variable in both the space and time complexity, the range of numbers in the arrays, the greater the numbers on the arrays get, the slower and heavy the algorithm will run, making it unusable if there is need to use bignums, or even big interval of integers as it was pointed on the reddit thread.
+
+For instance, assuming 32bit integers, computing the hash map for the array ``[INT_MIN, INT_MAX]`` would take at least 16GiB of memory.
 
 That aside, it is important to acknowledge that it is trivial to make the classic algorithm work with floating-point numbers, which is not possible in the proposed solution.
+
+## In retrospect
+
+I have made a [thread](https://www.reddit.com/r/compsci/comments/hra2lw/i_think_ive_found_a_new_solution_for_a_simple/) on the r/compsci subreddit about this solution and a lot of people gave a lot of insights, this section is a compilation of those, and I can't take credit for any of this.
+
+Thanks everyone for the feedback.
+
+### Binary search
+
+It was pointed that, assuming **m < n**, instead of computing the hash map for all integers between **max(A)-min(A)** the closest pair of a element **B[i]** could be found on **A** with a binary search for the two closest elements, and choosing the closest one. That would make the overall solution **O(m\*log(m) + n\*log(m))** compared with the original **O(m\*log(m) + n\*log(n))**. And it would take us back to **O(1)** space complexity realm :).
+
+It was also suggested the use of a [range query data structure](https://en.wikipedia.org/wiki/Range_query_(data_structures)) (which I didn't even know existed :astonished:) such as an [interval tree](https://en.wikipedia.org/wiki/Interval_tree) and that would allow the problem to to work with floating-point numbers :sunglasses:.
