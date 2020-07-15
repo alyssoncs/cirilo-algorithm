@@ -205,6 +205,6 @@ Thanks everyone for the feedback.
 
 ### Binary search
 
-It was pointed that, assuming **m < n**, instead of computing the hash map for all integers between **max(A)-min(A)** the closest pair of a element **B[i]** could be found on **A** with a binary search for the two closest elements, and choosing the closest one. That would make the overall solution **O(m\*log(m) + n\*log(m))** compared with the original **O(m\*log(m) + n\*log(n))**. And it would take us back to **O(1)** space complexity realm :).
+It was pointed that, assuming **m < n**, instead of computing the hash map for all integers between **max(A)-min(A)** the closest pair of a element **B[i]** could be found on **A** with a binary search for the two closest elements, and choosing the closest one. That would make the overall solution **O(m\*log(m) + n\*log(m))** compared with the original **O(m\*log(m) + n\*log(n))**. And it would take us back to **O(1)** space complexity realm :smiley:.
 
 It was also suggested the use of a [range query data structure](https://en.wikipedia.org/wiki/Range_query_(data_structures)) (which I didn't even know existed :astonished:) such as an [interval tree](https://en.wikipedia.org/wiki/Interval_tree) and that would allow the problem to to work with floating-point numbers :sunglasses:.
