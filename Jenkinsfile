@@ -4,7 +4,7 @@ pipeline {
 		stage('build') {
 			steps {
 				sh 'mkdir obj'
-				sh 'make bin'
+				sh 'mkdir bin'
 				sh 'make'
 			}
 		}
