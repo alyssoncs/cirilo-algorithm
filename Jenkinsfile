@@ -3,8 +3,8 @@ pipeline {
 	stages {
 		stage('build') {
 			steps {
-				sh 'mkdir obj'
-				sh 'mkdir bin'
+				sh 'mkdir -p obj'
+				sh 'mkdir -p bin'
 				sh 'make'
 			}
 		}
