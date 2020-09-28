@@ -1,5 +1,5 @@
 # Cirilo's algorithm
-> An overkill algorithm for those in a hurry
+> An overkill solution for those in a hurry
 
 The following is a description of a&ndash;as far as I know&ndash;new solution for the [Smallest Difference pair of values between two unsorted Arrays](https://www.geeksforgeeks.org/smallest-difference-pair-values-two-unsorted-arrays) problem.
 
@@ -9,7 +9,7 @@ I'm claiming the following algorithm as mine because I couldn't find it elsewher
 
 ## The problem
 
-Simply stated, the problem consists of given two arrays of integers, **A** and **B** of size **m** and **n** respectively, find the pair of numbers **(A<sub>i</sub>, B<sub>j</sub>)** with the smallest difference between them.
+Simply stated, the problem consists of, given two arrays of integers, **A** and **B** of size **m** and **n** respectively, find the pair of numbers **(A<sub>i</sub>, B<sub>j</sub>)** with the smallest difference between them.
 
 So, given:
 
@@ -18,14 +18,14 @@ A = [1, 12, 150]
 B = [32, -20, 11, 8]
 ```
 
-The solution would be the array:
+The solution would be the pair:
 ```
 [12, 11]
 ```
 
 ### Classic solution
 
-The solution proposed on GeeksforGeeks and others resources is based on sorting both arrays, and then finding the smallest pair using two pointers logic with linear complexity. The overall solution has a time complexity of **O(m*log(m) + n\*log(n))** and space complexity of **O(1)**.
+The solution proposed on GeeksforGeeks and others resources is based on sorting both arrays, and then finding the smallest pair using a two pointers logic with linear complexity. The overall solution has a time complexity of **O(m*log(m) + n\*log(n))** and space complexity of **O(1)**.
 
 The solution in pseudocode can be found below:
 
@@ -55,7 +55,7 @@ find(A, B) {
 
 ### Cirilo's algorithm
 
-My solution sorts only the smallest array, taking **O(m\*log(m))**. 
+My solution sorts only the smallest array, taking **O(m\*log(m))** (assuming **A** as the smallest one). 
 
 After that, it computes and save in a hash map all the smallest possible pairs between every number in the array and all integers between **min(A)** and **max(A)**, that being the minimum and maximum value contained in the array. All of that can be done in **O(max(A) - min(A))**.
 
@@ -81,11 +81,11 @@ So if, after sorted, we had ``A = [-2, 5, 9, 12]`` we would create the following
 ]
 ```
 
-Where the key are all the integers between **min(A)** and **max(A)** and the values are the elements in **A** closest to these numbers.
+Where the *keys* are all the integers between **min(A)** and **max(A)** and the *values* are the elements in **A** closest to these numbers.
 
 Finally, for each element on **B** we form a pair with the closest element from it in **A** following this logic: 
 
-* if the element is less than **min(A)]** the closest element we can get is **min(A)**;
+* if the element is less than **min(A)** the closest element we can get is **min(A)**;
 * if it is greater than **max(A)** the closest element is **max(A)**;
 * for any other element that is between **min(A)** and **max(A)** the closest pair can be found querying the map for that element.
 
@@ -189,9 +189,9 @@ And my solution takes
 
 ## Drawbacks
 
-The most obvious drawback of this solution is the increase on the space complexity, being an example of the space-time trade-off.
+The most obvious drawback of this solution is the increase on the space complexity, being an example of a space-time trade-off.
 
-It also introduces another variable in both the space and time complexity, the range of numbers in the arrays, the greater the numbers on the arrays get, the slower and heavy the algorithm will run, making it unusable if there is need to use bignums, or even big interval of integers as it was pointed on the reddit thread.
+It also introduces another variable in both the space and time complexity, the range of numbers in the arrays, the greater the numbers on the arrays get, the slower the algorithm will run and more memory it will consume, making it unusable if there is need to use bignums, or even big interval of integers as it was pointed on the reddit thread.
 
 For instance, assuming 32bit integers, computing the hash map for the array ``[INT_MIN, INT_MAX]`` would take at least 16GiB of memory.
 
@@ -209,4 +209,4 @@ It was pointed that, assuming **m < n**, instead of computing the hash map for a
 
 ### Range query data structures
 
-It was also suggested the use of a [range query data structure](https://en.wikipedia.org/wiki/Range_query_(data_structures)) (which I didn't even know existed :astonished:) such as an [interval tree](https://en.wikipedia.org/wiki/Interval_tree) and that would allow the problem to to work with floating-point numbers :sunglasses:.
+It was also suggested the use of a [range query data structure](https://en.wikipedia.org/wiki/Range_query_(data_structures)) (which I didn't even know existed :astonished:) such as an [interval tree](https://en.wikipedia.org/wiki/Interval_tree) and that would allow the solution to to work with floating-point numbers again :sunglasses:.
