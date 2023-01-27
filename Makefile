@@ -3,7 +3,7 @@ cflags = -Wall -Wpedantic -std=c11
 build_dir = build
 src_dir = src/main
 
-test: ${build_dir}/cirilo.o ${build_dir}/hashmap.o ${build_dir}/classic.o ${src_dir}/algorithms/cirilo/cirilo.h ${src_dir}/test.c
+compare: ${build_dir}/cirilo.o ${build_dir}/hashmap.o ${build_dir}/classic.o ${src_dir}/algorithms/cirilo/cirilo.h ${src_dir}/compare.c
 	mkdir -p bin
 	$(CC) ${src_dir}/$@.c ${build_dir}/cirilo.o ${build_dir}/hashmap.o ${build_dir}/classic.o -o bin/$@ $(cflags)
 
