@@ -1,20 +1,21 @@
 CC = gcc
 cflags = -Wall -Wpedantic -std=c11
 build_dir = build
+src_dir = src/main
 
-test: ${build_dir}/cirilo.o ${build_dir}/hashmap.o ${build_dir}/classic.o src/algorithms/cirilo/cirilo.h src/test.c
+test: ${build_dir}/cirilo.o ${build_dir}/hashmap.o ${build_dir}/classic.o ${src_dir}/algorithms/cirilo/cirilo.h ${src_dir}/test.c
 	mkdir -p bin
-	$(CC) src/$@.c ${build_dir}/cirilo.o ${build_dir}/hashmap.o ${build_dir}/classic.o -o bin/$@ $(cflags)
+	$(CC) ${src_dir}/$@.c ${build_dir}/cirilo.o ${build_dir}/hashmap.o ${build_dir}/classic.o -o bin/$@ $(cflags)
 
-${build_dir}/cirilo.o: src/algorithms/cirilo/cirilo.c src/libs/hashmap/hashmap.h
+${build_dir}/cirilo.o: ${src_dir}/algorithms/cirilo/cirilo.c ${src_dir}/libs/hashmap/hashmap.h
 	mkdir -p ${build_dir}
 	$(CC) -c $< -o $@ $(cflags) 
 
-${build_dir}/hashmap.o: src/libs/hashmap/hashmap.c
+${build_dir}/hashmap.o: ${src_dir}/libs/hashmap/hashmap.c
 	mkdir -p ${build_dir}
 	$(CC) -c $< -o $@ $(cflags) 
 	
-${build_dir}/classic.o: src/algorithms/classic/classic.c
+${build_dir}/classic.o: ${src_dir}/algorithms/classic/classic.c
 	mkdir -p ${build_dir}
 	$(CC) -c $< -o $@ $(cflags) 
 
