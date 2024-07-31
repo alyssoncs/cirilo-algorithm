@@ -2,25 +2,26 @@
 
 #include "../../libs/hashmap/hashmap.h"
 
-static struct hashmap *find_closest_map(int arr[], int n) 
+static struct hashmap *find_closest_map(int sorted_arr[], int n) 
 {
-	struct hashmap *closest = hashmap_create(arr[0], arr[n - 1]);
+	struct hashmap *const closest = hashmap_create(sorted_arr[0], sorted_arr[n - 1]);
 	if (closest) {
 		for (int i = 0; i < n-1; i++) {
-			hashmap_put(closest, arr[i], arr[i]);
+			const int curr_elm = sorted_arr[i];
+			const int next_elm = sorted_arr[i+1];
 
-			int middle = (arr[i] + arr[i+1]) / 2;
+			hashmap_put(closest, curr_elm, curr_elm);
 
-			for (int num = arr[i] + 1; num < arr[i+1]; num++) {
-				if (num <= middle) {
-					hashmap_put(closest, num, arr[i]);
-				} else {
-					hashmap_put(closest, num, arr[i+1]);
-				}
+			int middle = (curr_elm + next_elm) / 2;
+			for (int num = curr_elm + 1; num < next_elm; num++) {
+				if (num <= middle)
+					hashmap_put(closest, num, curr_elm);
+				else
+					hashmap_put(closest, num, next_elm);
 			}
 		}
 
-		hashmap_put(closest, arr[n-1], arr[n-1]);
+		hashmap_put(closest, sorted_arr[n-1], sorted_arr[n-1]);
 	}
 
 	return closest;
@@ -38,48 +39,53 @@ static int cmp (const void * a, const void * b)
 
 static void swap_arrays(int **first_array, int **second_array, int *m, int *n)
 {
-	int *tmp = *first_array;
+	int *const tmp = *first_array;
 	*first_array = *second_array;
 	*second_array = tmp;
 
-	int tmp_size = *m;
+	const int tmp_size = *m;
 	*m = *n;
 	*n = tmp_size;
 }
 
+static int find_closest(struct hashmap *closest_map, int sorted_arr[], int arr_size, int target)
+{
+	const int smallest = sorted_arr[0];
+	const int greatest = sorted_arr[arr_size - 1];
+	int closest;
+	if (target > greatest) {
+		closest = greatest;
+	} else if (target < smallest) {
+		closest = smallest;
+	} else {
+		closest = hashmap_get(closest_map, target);
+	}
+
+	return closest;
+
+}
+
 int *cirilo_find(int first_array[], int second_array[], int m, int n)
 {
-	if (m > n) {
+	if (m > n)
 		swap_arrays(&first_array, &second_array, &m, &n);
-	}
 
 	qsort(first_array, m, sizeof(int), cmp);
 
-	struct hashmap *closest = find_closest_map(first_array, m);
-	int *closest_pair = malloc(sizeof(int) * 2);
+	struct hashmap *const closest = find_closest_map(first_array, m);
+	int *const closest_pair = malloc(sizeof(int) * 2);
 
-	if (!closest || !closest_pair) {
+	if (!closest || !closest_pair)
 		return NULL;
-	}
 	
 	closest_pair[0] = first_array[0];
 	closest_pair[1] = second_array[0];
 
-	int smallest_from_first = first_array[0];
-	int greatest_from_first = first_array[m - 1];
 	for (int i = 0; i < n; i++) {
-		int current_from_first;
+		const int closest_from_first = find_closest(closest, first_array, m, second_array[i]);
 
-		if (second_array[i] > greatest_from_first) {
-			current_from_first = greatest_from_first;
-		} else if (second_array[i] < smallest_from_first) {
-			current_from_first = smallest_from_first;
-		} else {
-			current_from_first = hashmap_get(closest, second_array[i]);
-		}
-
-		if (diff(current_from_first, second_array[i]) < diff(closest_pair[0], closest_pair[1])) {
-			closest_pair[0] = current_from_first;
+		if (diff(closest_from_first, second_array[i]) < diff(closest_pair[0], closest_pair[1])) {
+			closest_pair[0] = closest_from_first;
 			closest_pair[1] = second_array[i];
 		}
 	}
