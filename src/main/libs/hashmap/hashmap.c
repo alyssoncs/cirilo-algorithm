@@ -8,10 +8,10 @@ struct hashmap {
 
 struct hashmap *hashmap_create(int min, int max)
 {
-	struct hashmap *hashmap= malloc(sizeof(hashmap));
+	struct hashmap *const hashmap= malloc(sizeof(hashmap));
 	
-	long size = (long)max - (long)min + 1;
-	int *map = malloc(sizeof(int) * size);
+	const long size = (long)max - (long)min + 1;
+	int *const map = malloc(sizeof(int) * size);
 	
 	if (hashmap && map) {
 		hashmap->map = map;
@@ -35,16 +35,15 @@ void hashmap_destroy(struct hashmap *map)
 
 void hashmap_put(struct hashmap map[static 1], int key, int value) 
 {
-	long index = key - map->min_value;
+	const long index = key - map->min_value;
 
 	map->map[index] = value;
 }
 
 int hashmap_get(struct hashmap map[static 1], int key)
 {
-	long index = key - map->min_value;
+	const long index = key - map->min_value;
 
 	return map->map[index];
 }
-
 
