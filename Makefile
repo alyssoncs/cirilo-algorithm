@@ -1,6 +1,6 @@
 # compiler
-CC = gcc
-CFLAGS = -Wall -Wpedantic -std=c11 -MP -MD
+CC = clang
+CFLAGS = -Wall -Wextra -pedantic -std=c17 -MP -MD
 
 # directories
 MAIN_SRC_DIR = src/main
