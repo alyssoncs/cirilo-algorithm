@@ -182,7 +182,7 @@ int main(int argc, char *argv[static argc])
 			free(first_array);
 			free(second_array);
 
-			fprintf(stderr, "not able to allocate so much space\n");
+			print_memory_error();
 			return 3;
 		}
 
