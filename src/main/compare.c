@@ -9,6 +9,12 @@
 #define MIN_NUMBER -10000
 #define MAX_NUMBER  10000
 
+enum error {
+	MISSING_ARGS,
+	ALGORITHM_USED_TOO_MUCH_MEMORY,
+	SETUP_USED_TOO_MUCH_MEMORY,
+};
+
 static int *create_random_array(int size, int lower, int upper) 
 {
 	int *const arr = malloc(sizeof(int) * size);
@@ -51,26 +57,14 @@ struct args_result {
 	const bool is_success;
 };
 
-static struct args_result read_args(int argc, char *argv[static argc])
-{
-	if (argc < 3) {
-		return (struct args_result) { 
-			.is_success = false, 
-			.value = { .error = 1 },
-		};
-	}
-	
-	int start, end, step;
+static struct args_result args_error() {
+	return (struct args_result) { 
+		.is_success = false, 
+		.value = { .error = MISSING_ARGS },
+	};
+}
 
-	sscanf(argv[1], "%d", &start);
-	sscanf(argv[2], "%d", &end);
-
-	if (argc > 3) {
-		sscanf(argv[3], "%d", &step);
-	} else {
-		step = 1;
-	}
-
+static struct args_result args_success(int start, int end, int step) {
 	return (struct args_result) {
 		.is_success = true,
 		.value = {
@@ -81,6 +75,24 @@ static struct args_result read_args(int argc, char *argv[static argc])
 			}
 		},
 	};
+}
+
+static struct args_result read_args(int argc, char *argv[static argc])
+{
+	if (argc < 3)
+		return args_error();
+	
+	int start, end, step;
+
+	sscanf(argv[1], "%d", &start);
+	sscanf(argv[2], "%d", &end);
+
+	if (argc > 3)
+		sscanf(argv[3], "%d", &step);
+	else 
+		step = 1;
+
+	return args_success(start, end, step);
 }
 
 union measure_union {
@@ -103,7 +115,7 @@ static struct measure_result measure_success(double measurement) {
 static struct measure_result measure_error() {
 	return (struct measure_result) {
 		.is_success = false,
-		.value = { .error = 2 },
+		.value = { .error = ALGORITHM_USED_TOO_MUCH_MEMORY },
 	};
 }
 
@@ -183,7 +195,7 @@ int main(int argc, char *argv[static argc])
 			free(second_array);
 
 			print_memory_error();
-			return 3;
+			return SETUP_USED_TOO_MUCH_MEMORY;
 		}
 
 	}
