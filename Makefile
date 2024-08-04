@@ -1,6 +1,6 @@
 # compiler
 CC = clang
-CFLAGS = -Wall -Wextra -pedantic -Werror -std=c17 -MP -MD
+CFLAGS = -Wall -Wextra -pedantic -Werror -std=c2x -MP -MD
 
 # directories
 MAIN_SRC_DIR = src/main
